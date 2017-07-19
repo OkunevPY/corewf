@@ -106,8 +106,8 @@ namespace DynamicConsoleApp
 
         static void Main(string[] args)
         {
-            //Console.WriteLine("------------- ParameterlessDelay ------------- ");
-            //DynamicDemo.ParameterlessDelay();
+            Console.WriteLine("------------- ParameterlessDelay ------------- ");
+            DynamicDemo.ParameterlessDelay();
 
             Console.WriteLine("------------- Hello World ------------- ");
             try
@@ -117,15 +117,15 @@ namespace DynamicConsoleApp
             {
                 Console.WriteLine("Invalid Workflow WriteLine" + iwe.ToString()); 
             }
-            //Console.WriteLine("------------- ParameterDelay ------------- ");
-            //try
-            //{
-            //    DynamicDemo.ParameterDelay();
-            //}
-            //catch (CoreWf.InvalidWorkflowException iwe)
-            //{
-            //    Console.WriteLine("Invalid Workflow ParameterDelay" + iwe.ToString());
-            //}
+            Console.WriteLine("------------- ParameterDelay ------------- ");
+            try
+            {
+                DynamicDemo.ParameterDelay();
+            }
+            catch (CoreWf.InvalidWorkflowException iwe)
+            {
+                Console.WriteLine("Invalid Workflow ParameterDelay" + iwe.ToString());
+            }
             Console.WriteLine("------------- Done ------------- ");
             Console.ReadLine(); 
         }
