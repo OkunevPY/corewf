@@ -186,7 +186,26 @@ namespace CoreWf
 
         internal void SetupBinding(Activity owningElement, bool createEmptyBinding)
         {
-            if (!this.IsBound)
+            if (this.bindingProperty != null)
+            {
+                Argument argument = (Argument)this.bindingProperty.GetValue(this.bindingPropertyOwner);
+
+                if (argument == null)
+                {
+                    Fx.Assert(this.bindingProperty.PropertyType.IsGenericType, "We only support arguments that are generic types in our reflection walk.");
+
+                    argument = (Argument)Activator.CreateInstance(this.bindingProperty.PropertyType);
+                    argument.WasDesignTimeNull = true;
+
+                    if (createEmptyBinding && !this.bindingProperty.IsReadOnly)
+                    {
+                        this.bindingProperty.SetValue(this.bindingPropertyOwner, argument);
+                    }
+                }
+
+                Argument.Bind(argument, this);
+            }
+            else if (!this.IsBound)
             {
                 PropertyInfo targetProperty = null;
                 foreach (var property in owningElement.GetType().GetProperties())

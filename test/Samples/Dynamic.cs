@@ -21,7 +21,7 @@ namespace Samples
             var textOut = new InArgument<string>();
             //Create the activity, property, and implementation  
             Activity dynamicWorkflow = new DynamicActivity()
-            {
+            { 
                 Properties =
                 {
                     new DynamicActivityProperty
