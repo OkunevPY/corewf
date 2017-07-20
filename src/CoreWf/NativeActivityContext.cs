@@ -57,27 +57,27 @@ namespace CoreWf
             }
         }
 
-        //internal bool HasRuntimeTransaction
-        //{
-        //    get
-        //    {
-        //        return this.executor.HasRuntimeTransaction;
-        //    }
-        //}
+        internal bool HasRuntimeTransaction
+        {
+            get
+            {
+                return _executor.HasRuntimeTransaction;
+            }
+        }
 
-        //internal bool RequiresTransactionContextWaiterExists
-        //{
-        //    get
-        //    {
-        //        return this.executor.RequiresTransactionContextWaiterExists;
-        //    }
-        //}
+        internal bool RequiresTransactionContextWaiterExists
+        {
+            get
+            {
+                return _executor.RequiresTransactionContextWaiterExists;
+            }
+        }
 
         internal bool IsInNoPersistScope
         {
             get
             {
-                if ((this.Properties.Find(NoPersistProperty.Name) != null) /*|| (this.executor.HasRuntimeTransaction)*/)
+                if ((this.Properties.Find(NoPersistProperty.Name) != null) || (_executor.HasRuntimeTransaction))
                 {
                     return true;
                 }
@@ -2236,7 +2236,7 @@ namespace CoreWf
 
         //internal void RequestTransactionContext(bool isRequires, RuntimeTransactionHandle handle, Action<NativeActivityTransactionContext, object> callback, object state)
         //{
-        //    this.executor.RequestTransactionContext(this.CurrentInstance, isRequires, handle, callback, state);
+        //   _executor.RequestTransactionContext(this.CurrentInstance, isRequires, handle, callback, state);
         //}
 
         //internal void CompleteTransaction(RuntimeTransactionHandle handle, BookmarkCallback callback)
@@ -2245,7 +2245,7 @@ namespace CoreWf
         //    {
         //        ThrowIfCanInduceIdleNotSet();
         //    }
-        //    this.executor.CompleteTransaction(handle, callback, this.CurrentInstance);
+        //   _executor.CompleteTransaction(handle, callback, this.CurrentInstance);
         //}
 
         internal void RequestPersist(BookmarkCallback onPersistComplete)

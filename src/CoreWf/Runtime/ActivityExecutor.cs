@@ -12,11 +12,12 @@ using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Threading;
+using System.Transactions;
 
 namespace CoreWf.Runtime
 {
     [DataContract(Name = XD.Executor.Name, Namespace = XD.Runtime.Namespace)]
-    internal class ActivityExecutor /*: IEnlistmentNotification*/
+    internal class ActivityExecutor : IEnlistmentNotification
     {
         private static ReadOnlyCollection<BookmarkInfo> s_emptyBookmarkInfoCollection;
 
@@ -486,33 +487,33 @@ namespace CoreWf.Runtime
             }
         }
 
-        //public bool RequiresTransactionContextWaiterExists
-        //{
-        //    get
-        //    {
-        //        return this.transactionContextWaiters != null && this.transactionContextWaiters.Count > 0 && this.transactionContextWaiters[0].IsRequires;
-        //    }
-        //}
+        public bool RequiresTransactionContextWaiterExists
+        {
+            get
+            {
+                return this.transactionContextWaiters != null && this.transactionContextWaiters.Count > 0 && this.transactionContextWaiters[0].IsRequires;
+            }
+        }
 
-        //public bool HasRuntimeTransaction
-        //{
-        //    get { return this.runtimeTransaction != null; }
-        //}
+        public bool HasRuntimeTransaction
+        {
+            get { return this.runtimeTransaction != null; }
+        }
 
-        //public Transaction CurrentTransaction
-        //{
-        //    get
-        //    {
-        //        if (this.runtimeTransaction != null)
-        //        {
-        //            return this.runtimeTransaction.ClonedTransaction;
-        //        }
-        //        else
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //}
+        public Transaction CurrentTransaction
+        {
+            get
+            {
+                if (this.runtimeTransaction != null)
+                {
+                    return this.runtimeTransaction.ClonedTransaction;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
 
         private static ReadOnlyCollection<BookmarkInfo> EmptyBookmarkInfoCollection
         {
@@ -1087,231 +1088,231 @@ namespace CoreWf.Runtime
             }
         }
 
-        //void IEnlistmentNotification.Commit(Enlistment enlistment)
-        //{
-        //    // Because of ordering we might get this notification after we've already
-        //    // determined the outcome
+        void IEnlistmentNotification.Commit(Enlistment enlistment)
+        {
+            // Because of ordering we might get this notification after we've already
+            // determined the outcome
 
-        //    // Get a local copy of this.runtimeTransaction because it is possible for
-        //    // this.runtimeTransaction to be nulled out between the time we check for null
-        //    // and the time we try to lock it.
-        //    RuntimeTransactionData localRuntimeTransaction = this.runtimeTransaction;
+            // Get a local copy of this.runtimeTransaction because it is possible for
+            // this.runtimeTransaction to be nulled out between the time we check for null
+            // and the time we try to lock it.
+            RuntimeTransactionData localRuntimeTransaction = this.runtimeTransaction;
 
-        //    if (localRuntimeTransaction != null)
-        //    {
-        //        AsyncWaitHandle completionEvent = null;
+            if (localRuntimeTransaction != null)
+            {
+                AsyncWaitHandle completionEvent = null;
 
-        //        lock (localRuntimeTransaction)
-        //        {
-        //            completionEvent = localRuntimeTransaction.CompletionEvent;
+                lock (localRuntimeTransaction)
+                {
+                    completionEvent = localRuntimeTransaction.CompletionEvent;
 
-        //            localRuntimeTransaction.TransactionStatus = TransactionStatus.Committed;
-        //        }
+                    localRuntimeTransaction.TransactionStatus = TransactionStatus.Committed;
+                }
 
-        //        enlistment.Done();
+                enlistment.Done();
 
-        //        if (completionEvent != null)
-        //        {
-        //            completionEvent.Set();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        enlistment.Done();
-        //    }
-        //}
+                if (completionEvent != null)
+                {
+                    completionEvent.Set();
+                }
+            }
+            else
+            {
+                enlistment.Done();
+            }
+        }
 
-        //void IEnlistmentNotification.InDoubt(Enlistment enlistment)
-        //{
-        //    ((IEnlistmentNotification)this).Rollback(enlistment);
-        //}
+        void IEnlistmentNotification.InDoubt(Enlistment enlistment)
+        {
+            ((IEnlistmentNotification)this).Rollback(enlistment);
+        }
 
-        ////Note - There is a scenario in the TransactedReceiveScope while dealing with server side WCF dispatcher created transactions, 
-        ////the activity instance will end up calling BeginCommit before finishing up its execution. By this we allow the executing TransactedReceiveScope activity to 
-        ////complete and the executor is "free" to respond to this Prepare notification as part of the commit processing of that server side transaction
-        //void IEnlistmentNotification.Prepare(PreparingEnlistment preparingEnlistment)
-        //{
-        //    // Because of ordering we might get this notification after we've already
-        //    // determined the outcome
+        //Note - There is a scenario in the TransactedReceiveScope while dealing with server side WCF dispatcher created transactions, 
+        //the activity instance will end up calling BeginCommit before finishing up its execution. By this we allow the executing TransactedReceiveScope activity to 
+        //complete and the executor is "free" to respond to this Prepare notification as part of the commit processing of that server side transaction
+        void IEnlistmentNotification.Prepare(PreparingEnlistment preparingEnlistment)
+        {
+            // Because of ordering we might get this notification after we've already
+            // determined the outcome
 
-        //    // Get a local copy of this.runtimeTransaction because it is possible for
-        //    // this.runtimeTransaction to be nulled out between the time we check for null
-        //    // and the time we try to lock it.
-        //    RuntimeTransactionData localRuntimeTransaction = this.runtimeTransaction;
+            // Get a local copy of this.runtimeTransaction because it is possible for
+            // this.runtimeTransaction to be nulled out between the time we check for null
+            // and the time we try to lock it.
+            RuntimeTransactionData localRuntimeTransaction = this.runtimeTransaction;
 
-        //    if (localRuntimeTransaction != null)
-        //    {
-        //        bool callPrepared = false;
+            if (localRuntimeTransaction != null)
+            {
+                bool callPrepared = false;
 
-        //        lock (localRuntimeTransaction)
-        //        {
-        //            if (localRuntimeTransaction.HasPrepared)
-        //            {
-        //                callPrepared = true;
-        //            }
-        //            else
-        //            {
-        //                localRuntimeTransaction.PendingPreparingEnlistment = preparingEnlistment;
-        //            }
-        //        }
+                lock (localRuntimeTransaction)
+                {
+                    if (localRuntimeTransaction.HasPrepared)
+                    {
+                        callPrepared = true;
+                    }
+                    else
+                    {
+                        localRuntimeTransaction.PendingPreparingEnlistment = preparingEnlistment;
+                    }
+                }
 
-        //        if (callPrepared)
-        //        {
-        //            preparingEnlistment.Prepared();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        preparingEnlistment.Prepared();
-        //    }
-        //}
+                if (callPrepared)
+                {
+                    preparingEnlistment.Prepared();
+                }
+            }
+            else
+            {
+                preparingEnlistment.Prepared();
+            }
+        }
 
-        //void IEnlistmentNotification.Rollback(Enlistment enlistment)
-        //{
-        //    // Because of ordering we might get this notification after we've already
-        //    // determined the outcome
+        void IEnlistmentNotification.Rollback(Enlistment enlistment)
+        {
+            // Because of ordering we might get this notification after we've already
+            // determined the outcome
 
-        //    // Get a local copy of this.runtimeTransaction because it is possible for
-        //    // this.runtimeTransaction to be nulled out between the time we check for null
-        //    // and the time we try to lock it.
-        //    RuntimeTransactionData localRuntimeTransaction = this.runtimeTransaction;
+            // Get a local copy of this.runtimeTransaction because it is possible for
+            // this.runtimeTransaction to be nulled out between the time we check for null
+            // and the time we try to lock it.
+            RuntimeTransactionData localRuntimeTransaction = this.runtimeTransaction;
 
-        //    if (localRuntimeTransaction != null)
-        //    {
-        //        AsyncWaitHandle completionEvent = null;
+            if (localRuntimeTransaction != null)
+            {
+                AsyncWaitHandle completionEvent = null;
 
-        //        lock (localRuntimeTransaction)
-        //        {
-        //            completionEvent = localRuntimeTransaction.CompletionEvent;
+                lock (localRuntimeTransaction)
+                {
+                    completionEvent = localRuntimeTransaction.CompletionEvent;
 
-        //            localRuntimeTransaction.TransactionStatus = TransactionStatus.Aborted;
-        //        }
+                    localRuntimeTransaction.TransactionStatus = TransactionStatus.Aborted;
+                }
 
-        //        enlistment.Done();
+                enlistment.Done();
 
-        //        if (completionEvent != null)
-        //        {
-        //            completionEvent.Set();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        enlistment.Done();
-        //    }
-        //}
+                if (completionEvent != null)
+                {
+                    completionEvent.Set();
+                }
+            }
+            else
+            {
+                enlistment.Done();
+            }
+        }
 
-        //public void RequestTransactionContext(ActivityInstance instance, bool isRequires, RuntimeTransactionHandle handle, Action<NativeActivityTransactionContext, object> callback, object state)
-        //{
-        //    if (isRequires)
-        //    {
-        //        EnterNoPersist();
-        //    }
+        public void RequestTransactionContext(ActivityInstance instance, bool isRequires, RuntimeTransactionHandle handle, Action<NativeActivityTransactionContext, object> callback, object state)
+        {
+            if (isRequires)
+            {
+                EnterNoPersist();
+            }
 
-        //    if (this.transactionContextWaiters == null)
-        //    {
-        //        this.transactionContextWaiters = new Quack<TransactionContextWaiter>();
-        //    }
+            if (this.transactionContextWaiters == null)
+            {
+                this.transactionContextWaiters = new Quack<TransactionContextWaiter>();
+            }
 
-        //    TransactionContextWaiter waiter = new TransactionContextWaiter(instance, isRequires, handle, new TransactionContextWaiterCallbackWrapper(callback, instance), state);
+            TransactionContextWaiter waiter = new TransactionContextWaiter(instance, isRequires, handle, new TransactionContextWaiterCallbackWrapper(callback, instance), state);
 
-        //    if (isRequires)
-        //    {
-        //        Fx.Assert(this.transactionContextWaiters.Count == 0 || !this.transactionContextWaiters[0].IsRequires, "Either we don't have any waiters or the first one better not be IsRequires == true");
+            if (isRequires)
+            {
+                Fx.Assert(this.transactionContextWaiters.Count == 0 || !this.transactionContextWaiters[0].IsRequires, "Either we don't have any waiters or the first one better not be IsRequires == true");
 
-        //        this.transactionContextWaiters.PushFront(waiter);
-        //    }
-        //    else
-        //    {
-        //        this.transactionContextWaiters.Enqueue(waiter);
-        //    }
+                this.transactionContextWaiters.PushFront(waiter);
+            }
+            else
+            {
+                this.transactionContextWaiters.Enqueue(waiter);
+            }
 
-        //    instance.IncrementBusyCount();
-        //    instance.WaitingForTransactionContext = true;
-        //}
+            instance.IncrementBusyCount();
+            instance.WaitingForTransactionContext = true;
+        }
 
-        //public void SetTransaction(RuntimeTransactionHandle handle, Transaction transaction, ActivityInstance isolationScope, ActivityInstance transactionOwner)
-        //{
-        //    this.runtimeTransaction = new RuntimeTransactionData(handle, transaction, isolationScope);
-        //    EnterNoPersist();
+        public void SetTransaction(RuntimeTransactionHandle handle, Transaction transaction, ActivityInstance isolationScope, ActivityInstance transactionOwner)
+        {
+            this.runtimeTransaction = new RuntimeTransactionData(handle, transaction, isolationScope);
+            EnterNoPersist();
 
-        //    // no more work to do for a host-declared transaction
-        //    if (transactionOwner == null)
-        //    {
-        //        return;
-        //    }
+            // no more work to do for a host-declared transaction
+            if (transactionOwner == null)
+            {
+                return;
+            }
 
-        //    Exception abortException = null;
+            Exception abortException = null;
 
-        //    try
-        //    {
-        //        transaction.EnlistVolatile(this, EnlistmentOptions.EnlistDuringPrepareRequired);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        if (Fx.IsFatal(e))
-        //        {
-        //            throw;
-        //        }
+            try
+            {
+                transaction.EnlistVolatile(this, EnlistmentOptions.EnlistDuringPrepareRequired);
+            }
+            catch (Exception e)
+            {
+                if (Fx.IsFatal(e))
+                {
+                    throw;
+                }
 
-        //        abortException = e;
-        //    }
+                abortException = e;
+            }
 
-        //    if (abortException != null)
-        //    {
-        //        AbortWorkflowInstance(abortException);
-        //    }
-        //    else
-        //    {
-        //        if (TD.RuntimeTransactionSetIsEnabled())
-        //        {
-        //            Fx.Assert(transactionOwner != null, "isolationScope and transactionOwner are either both null or both non-null");
-        //            TD.RuntimeTransactionSet(transactionOwner.Activity.GetType().ToString(), transactionOwner.Activity.DisplayName, transactionOwner.Id, isolationScope.Activity.GetType().ToString(), isolationScope.Activity.DisplayName, isolationScope.Id);
-        //        }
-        //    }
-        //}
+            if (abortException != null)
+            {
+                AbortWorkflowInstance(abortException);
+            }
+            else
+            {
+                if (TD.RuntimeTransactionSetIsEnabled())
+                {
+                    Fx.Assert(transactionOwner != null, "isolationScope and transactionOwner are either both null or both non-null");
+                    TD.RuntimeTransactionSet(transactionOwner.Activity.GetType().ToString(), transactionOwner.Activity.DisplayName, transactionOwner.Id, isolationScope.Activity.GetType().ToString(), isolationScope.Activity.DisplayName, isolationScope.Id);
+                }
+            }
+        }
 
-        //public void CompleteTransaction(RuntimeTransactionHandle handle, BookmarkCallback callback, ActivityInstance callbackOwner)
-        //{
-        //    if (callback != null)
-        //    {
-        //        Bookmark bookmark = this.bookmarkManager.CreateBookmark(callback, callbackOwner, BookmarkOptions.None);
-        //        ActivityExecutionWorkItem workItem;
+        public void CompleteTransaction(RuntimeTransactionHandle handle, BookmarkCallback callback, ActivityInstance callbackOwner)
+        {
+            if (callback != null)
+            {
+                Bookmark bookmark = this.bookmarkManager.CreateBookmark(callback, callbackOwner, BookmarkOptions.None);
+                ActivityExecutionWorkItem workItem;
 
-        //        ActivityInstance isolationScope = null;
+                ActivityInstance isolationScope = null;
 
-        //        if (this.runtimeTransaction != null)
-        //        {
-        //            isolationScope = this.runtimeTransaction.IsolationScope;
-        //        }
+                if (this.runtimeTransaction != null)
+                {
+                    isolationScope = this.runtimeTransaction.IsolationScope;
+                }
 
-        //        this.bookmarkManager.TryGenerateWorkItem(this, false, ref bookmark, null, isolationScope, out workItem);
-        //        this.scheduler.EnqueueWork(workItem);
-        //    }
+                this.bookmarkManager.TryGenerateWorkItem(this, false, ref bookmark, null, isolationScope, out workItem);
+                this.scheduler.EnqueueWork(workItem);
+            }
 
-        //    if (this.runtimeTransaction != null && this.runtimeTransaction.TransactionHandle == handle)
-        //    {
-        //        this.runtimeTransaction.ShouldScheduleCompletion = true;
+            if (this.runtimeTransaction != null && this.runtimeTransaction.TransactionHandle == handle)
+            {
+                this.runtimeTransaction.ShouldScheduleCompletion = true;
 
-        //        if (TD.RuntimeTransactionCompletionRequestedIsEnabled())
-        //        {
-        //            TD.RuntimeTransactionCompletionRequested(callbackOwner.Activity.GetType().ToString(), callbackOwner.Activity.DisplayName, callbackOwner.Id);
-        //        }
-        //    }
-        //}
+                if (TD.RuntimeTransactionCompletionRequestedIsEnabled())
+                {
+                    TD.RuntimeTransactionCompletionRequested(callbackOwner.Activity.GetType().ToString(), callbackOwner.Activity.DisplayName, callbackOwner.Id);
+                }
+            }
+        }
 
-        //void SchedulePendingCancelation()
-        //{
-        //    if (this.runtimeTransaction.IsRootCancelPending)
-        //    {
-        //        if (!this.rootInstance.IsCancellationRequested && !this.rootInstance.IsCompleted)
-        //        {
-        //            this.rootInstance.IsCancellationRequested = true;
-        //            this.scheduler.PushWork(new CancelActivityWorkItem(this.rootInstance));
-        //        }
+        void SchedulePendingCancelation()
+        {
+            if (this.runtimeTransaction.IsRootCancelPending)
+            {
+                if (!this.rootInstance.IsCancellationRequested && !this.rootInstance.IsCompleted)
+                {
+                    this.rootInstance.IsCancellationRequested = true;
+                    this.scheduler.PushWork(new CancelActivityWorkItem(this.rootInstance));
+                }
 
-        //        this.runtimeTransaction.IsRootCancelPending = false;
-        //    }
-        //}
+                this.runtimeTransaction.IsRootCancelPending = false;
+            }
+        }
 
         public EmptyWorkItem CreateEmptyWorkItem(ActivityInstance instance)
         {
@@ -1321,67 +1322,67 @@ namespace CoreWf.Runtime
             return workItem;
         }
 
-        //public bool IsCompletingTransaction(ActivityInstance instance)
-        //{
-        //    if (this.runtimeTransaction != null && this.runtimeTransaction.IsolationScope == instance)
-        //    {
-        //        // We add an empty work item to keep the instance alive
-        //        this.scheduler.PushWork(CreateEmptyWorkItem(instance));
+        public bool IsCompletingTransaction(ActivityInstance instance)
+        {
+            if (this.runtimeTransaction != null && this.runtimeTransaction.IsolationScope == instance)
+            {
+                // We add an empty work item to keep the instance alive
+                this.scheduler.PushWork(CreateEmptyWorkItem(instance));
 
-        //        // This will schedule the appopriate work item at the end of this work item
-        //        this.runtimeTransaction.ShouldScheduleCompletion = true;
+                // This will schedule the appopriate work item at the end of this work item
+                this.runtimeTransaction.ShouldScheduleCompletion = true;
 
-        //        if (TD.RuntimeTransactionCompletionRequestedIsEnabled())
-        //        {
-        //            TD.RuntimeTransactionCompletionRequested(instance.Activity.GetType().ToString(), instance.Activity.DisplayName, instance.Id);
-        //        }
+                if (TD.RuntimeTransactionCompletionRequestedIsEnabled())
+                {
+                    TD.RuntimeTransactionCompletionRequested(instance.Activity.GetType().ToString(), instance.Activity.DisplayName, instance.Id);
+                }
 
-        //        return true;
-        //    }
+                return true;
+            }
 
-        //    return false;
-        //}
+            return false;
+        }
 
-        //public void TerminateSpecialExecutionBlocks(ActivityInstance terminatedInstance, Exception terminationReason)
-        //{
-        //    if (this.runtimeTransaction != null && this.runtimeTransaction.IsolationScope == terminatedInstance)
-        //    {
-        //        Exception abortException = null;
+        public void TerminateSpecialExecutionBlocks(ActivityInstance terminatedInstance, Exception terminationReason)
+        {
+            if (this.runtimeTransaction != null && this.runtimeTransaction.IsolationScope == terminatedInstance)
+            {
+                Exception abortException = null;
 
-        //        try
-        //        {
-        //            this.runtimeTransaction.Rollback(terminationReason);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            if (Fx.IsFatal(e))
-        //            {
-        //                throw;
-        //            }
+                try
+                {
+                    this.runtimeTransaction.Rollback(terminationReason);
+                }
+                catch (Exception e)
+                {
+                    if (Fx.IsFatal(e))
+                    {
+                        throw;
+                    }
 
-        //            abortException = e;
-        //        }
+                    abortException = e;
+                }
 
-        //        if (abortException != null)
-        //        {
-        //            // It is okay for us to call AbortWorkflowInstance even if we are already
-        //            // aborting the instance since it is an async call (IE - we asking the host
-        //            // to re-enter the instance to abandon it.
-        //            AbortWorkflowInstance(abortException);
-        //        }
+                if (abortException != null)
+                {
+                    // It is okay for us to call AbortWorkflowInstance even if we are already
+                    // aborting the instance since it is an async call (IE - we asking the host
+                    // to re-enter the instance to abandon it.
+                    AbortWorkflowInstance(abortException);
+                }
 
-        //        SchedulePendingCancelation();
+                SchedulePendingCancelation();
 
-        //        ExitNoPersist();
+                ExitNoPersist();
 
-        //        if (this.runtimeTransaction.TransactionHandle.AbortInstanceOnTransactionFailure)
-        //        {
-        //            AbortWorkflowInstance(terminationReason);
-        //        }
+                if (this.runtimeTransaction.TransactionHandle.AbortInstanceOnTransactionFailure)
+                {
+                    AbortWorkflowInstance(terminationReason);
+                }
 
-        //        this.runtimeTransaction = null;
-        //    }
-        //}
+                this.runtimeTransaction = null;
+            }
+        }
 
         // Returns true if we actually performed the abort and false if we had already been disposed
         private bool Abort(Exception terminationException, bool isTerminate)
@@ -1572,28 +1573,28 @@ namespace CoreWf.Runtime
 
                     bool trackCancelRequested = true;
 
-                    //if (this.runtimeTransaction != null && this.runtimeTransaction.IsolationScope != null)
-                    //{
-                    //    if (this.runtimeTransaction.IsRootCancelPending)
-                    //    {
-                    //        trackCancelRequested = false;
-                    //    }
-
-                    //    this.runtimeTransaction.IsRootCancelPending = true;
-                    //}
-                    //else
-                    //{
-                    _rootInstance.IsCancellationRequested = true;
-
-                    if (_rootInstance.HasNotExecuted)
+                    if (this.runtimeTransaction != null && this.runtimeTransaction.IsolationScope != null)
                     {
-                        _scheduler.PushWork(CreateEmptyWorkItem(_rootInstance));
+                        if (this.runtimeTransaction.IsRootCancelPending)
+                        {
+                            trackCancelRequested = false;
+                        }
+
+                        this.runtimeTransaction.IsRootCancelPending = true;
                     }
-                    else
-                    {
-                        _scheduler.PushWork(new CancelActivityWorkItem(_rootInstance));
+                        else
+                        {
+                            _rootInstance.IsCancellationRequested = true;
+
+                        if (_rootInstance.HasNotExecuted)
+                        {
+                            _scheduler.PushWork(CreateEmptyWorkItem(_rootInstance));
+                        }
+                        else
+                        {
+                            _scheduler.PushWork(new CancelActivityWorkItem(_rootInstance));
+                        }
                     }
-                    //}
 
                     if (this.ShouldTrackCancelRequestedRecords && trackCancelRequested)
                     {
@@ -2078,11 +2079,11 @@ namespace CoreWf.Runtime
 
         private void ScheduleRuntimeWorkItems()
         {
-            //if (this.runtimeTransaction != null && this.runtimeTransaction.ShouldScheduleCompletion)
-            //{
-            //    this.scheduler.PushWork(new CompleteTransactionWorkItem(this.runtimeTransaction.IsolationScope));
-            //    return;
-            //}
+            if (this.runtimeTransaction != null && this.runtimeTransaction.ShouldScheduleCompletion)
+            {
+                this.scheduler.PushWork(new CompleteTransactionWorkItem(this.runtimeTransaction.IsolationScope));
+                return;
+            }
 
             if (_persistenceWaiters != null && _persistenceWaiters.Count > 0 &&
                 this.IsPersistable)
@@ -2142,10 +2143,10 @@ namespace CoreWf.Runtime
             // opportunity to gather up any output values.
             ScheduleCompletionBookmark(targetInstance);
 
-            //if (!targetInstance.HasNotExecuted)
-            //{
-            //    DebugActivityCompleted(targetInstance);
-            //}
+            if (!targetInstance.HasNotExecuted)
+            {
+                DebugActivityCompleted(targetInstance);
+            }
 
             // 3. Cleanup environmental resources (properties, handles, mapped locations)
             try
@@ -2386,23 +2387,23 @@ namespace CoreWf.Runtime
 
             if (this.IsIdle)
             {
-                //if (this.transactionContextWaiters != null && this.transactionContextWaiters.Count > 0)
-                //{
-                //    if (this.IsPersistable || (this.transactionContextWaiters[0].IsRequires && this.noPersistCount == 1))
-                //    {
-                //        TransactionContextWaiter waiter = this.transactionContextWaiters.Dequeue();
+                if (this.transactionContextWaiters != null && this.transactionContextWaiters.Count > 0)
+                {
+                    if (this.IsPersistable || (this.transactionContextWaiters[0].IsRequires && this.noPersistCount == 1))
+                    {
+                        TransactionContextWaiter waiter = this.transactionContextWaiters.Dequeue();
 
-                //        waiter.WaitingInstance.DecrementBusyCount();
-                //        waiter.WaitingInstance.WaitingForTransactionContext = false;
+                        waiter.WaitingInstance.DecrementBusyCount();
+                        waiter.WaitingInstance.WaitingForTransactionContext = false;
 
-                //        ScheduleItem(new TransactionContextWorkItem(waiter));
+                        ScheduleItem(new TransactionContextWorkItem(waiter));
 
-                //        MarkSchedulerRunning();
-                //        ResumeScheduler();
+                        MarkSchedulerRunning();
+                        ResumeScheduler();
 
-                //        return;
-                //    }
-                //}
+                        return;
+                    }
+                }
 
                 if (_shouldRaiseMainBodyComplete)
                 {
@@ -2527,10 +2528,10 @@ namespace CoreWf.Runtime
 
             ActivityInstance isolationInstance = null;
 
-            //if (this.runtimeTransaction != null)
-            //{
-            //    isolationInstance = this.runtimeTransaction.IsolationScope;
-            //}
+            if (this.runtimeTransaction != null)
+            {
+                isolationInstance = this.runtimeTransaction.IsolationScope;
+            }
 
             ActivityExecutionWorkItem resumeExecutionWorkItem;
 
@@ -2647,10 +2648,10 @@ namespace CoreWf.Runtime
 
             ActivityInstance isolationInstance = null;
 
-            //if (this.runtimeTransaction != null)
-            //{
-            //    isolationInstance = this.runtimeTransaction.IsolationScope;
-            //}
+            if (this.runtimeTransaction != null)
+            {
+                isolationInstance = this.runtimeTransaction.IsolationScope;
+            }
 
             bool hasOperations = _activeOperations != null && _activeOperations.Count > 0;
 
