@@ -15,7 +15,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 
-[assembly: XmlnsDefinition("http://schemas.microsoft.com/netfx/2009/xaml/activities", "CoreWf.Activity")]
+[assembly: XmlnsDefinition("http://schemas.microsoft.com/netfx/2009/xaml/activities", "CoreWf")]
 
 namespace CoreWf
 {

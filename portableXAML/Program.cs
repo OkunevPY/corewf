@@ -4,6 +4,7 @@ using System.Reflection;
 using Portable.Xaml;
 using System.Linq;
 using CoreWf;
+using CoreWf.XamlIntegration;
 
 namespace portableXAML
 {
@@ -19,37 +20,22 @@ namespace portableXAML
             return stream;
         }
 
-        public static string MethodSignature(MethodInfo mi)
-        {
-            String[] param = mi.GetParameters()
-                            .Select(p => String.Format("{0} {1}", p.ParameterType.Name, p.Name))
-                            .ToArray();
-
-
-            string signature = String.Format("{0} {1}({2})", mi.ReturnType.Name, mi.Name, String.Join(",", param));
-
-            return signature;
-        }
-
-
         static void Main(string[] args)
         {
-            string XamlText = @"<Activity x:Class=""WFTemplate"" xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">   <Sequence>     <WriteLine Text=""HelloWorld"" />   </Sequence> </Activity>";
-            var act = CoreWf.XamlIntegration.ActivityXamlServices.Load(GenerateStreamFromString(XamlText));
+            //Portable.Xaml.XamlSchemaContext
+            ActivityXamlServicesSettings settings = new CoreWf.XamlIntegration.ActivityXamlServicesSettings { CompileExpressions = false };
+
+            string ActivityAlone = @"<Activity x:Class=""WFTemplate"" xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">   </Activity>";
+            var act = CoreWf.XamlIntegration.ActivityXamlServices.Load(GenerateStreamFromString(ActivityAlone), settings);
             WorkflowInvoker.Invoke(act);
 
-            /*Assembly[] AssList = AppDomain.CurrentDomain.GetAssemblies();
-            var assemblySystemXaml = AssList.First(x => x.GetName().Name.Equals("Portable.Xaml"));
+            string ActivityWriteLine = @"<Activity x:Class=""WFTemplate"" xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">  <WriteLine Text=""HelloWorld"" /> </Activity>";
+            act = CoreWf.XamlIntegration.ActivityXamlServices.Load(GenerateStreamFromString(ActivityWriteLine), settings);
+            WorkflowInvoker.Invoke(act);
 
-            Type[] xamlTypes = assemblySystemXaml.GetTypes();
-            foreach (var t in xamlTypes)
-            {
-                Console.WriteLine(t.FullName);
-                foreach (var method in t.GetMethods())
-                {
-                    Console.WriteLine("\t" + MethodSignature(method));
-                }
-            }*/
+            string XamlText = @"<Activity x:Class=""WFTemplate"" xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">   <Sequence>     <WriteLine Text=""HelloWorld"" />   </Sequence> </Activity>";
+            act = CoreWf.XamlIntegration.ActivityXamlServices.Load(GenerateStreamFromString(XamlText), settings);
+            WorkflowInvoker.Invoke(act);
         }
     }
 }

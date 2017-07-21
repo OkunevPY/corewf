@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestObjects", "test\TestObj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicConsoleApp", "test\DynamicConsoleApp\DynamicConsoleApp.csproj", "{7F1D0774-0E6C-4909-A55A-F963805ECCC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "portableXAML", "portableXAML\portableXAML.csproj", "{18B561BD-5D80-4736-844F-91ACEF63C615}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "portableXAML", "portableXAML\portableXAML.csproj", "{18B561BD-5D80-4736-844F-91ACEF63C615}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
