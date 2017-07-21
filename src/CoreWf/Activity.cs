@@ -5,7 +5,7 @@ using CoreWf.Expressions;
 using CoreWf.Hosting;
 using CoreWf.Runtime;
 using CoreWf.Validation;
-//using Portable.Xaml.Markup;
+using Portable.Xaml.Markup;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +14,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+
+[assembly: XmlnsDefinition("http://schemas.microsoft.com/netfx/2009/xaml/activities", "CoreWf.Activity")]
 
 namespace CoreWf
 {
