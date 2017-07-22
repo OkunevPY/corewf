@@ -16,6 +16,8 @@ using System.Reflection;
 using System.Threading;
 
 [assembly: XmlnsDefinition("http://schemas.microsoft.com/netfx/2009/xaml/activities", "CoreWf")]
+[assembly: XmlnsDefinition("http://schemas.microsoft.com/netfx/2009/xaml/activities", "CoreWf.Statements")]
+[assembly: XmlnsDefinition("http://schemas.microsoft.com/netfx/2009/xaml/activities", "CoreWf.Expressions")]
 
 namespace CoreWf
 {
