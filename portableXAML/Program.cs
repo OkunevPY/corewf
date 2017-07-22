@@ -5,6 +5,8 @@ using Portable.Xaml;
 using System.Linq;
 using CoreWf;
 using CoreWf.XamlIntegration;
+using System.Xml;
+using System.Collections.Generic;
 
 namespace XAMLConsoleApp
 {
@@ -21,12 +23,7 @@ namespace XAMLConsoleApp
         }
 
         static void Main(string[] args)
-        {
-            Portable.Xaml.XamlObjectReaderSettings rs = new XamlObjectReaderSettings() { };
-            Portable.Xaml.XamlSchemaContext xsContext = new XamlSchemaContext() {  };
-            XamlSchemaContextSettings xsContextSettings = new XamlSchemaContextSettings() { };
-
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+        {           
             ActivityXamlServicesSettings settings = new CoreWf.XamlIntegration.ActivityXamlServicesSettings { CompileExpressions = false };
 
             string ActivityAlone = @"<Activity x:Class=""WFTemplate"" xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">   </Activity>";
@@ -37,15 +34,28 @@ namespace XAMLConsoleApp
             act = CoreWf.XamlIntegration.ActivityXamlServices.Load(GenerateStreamFromString(ActivityWriteLine), settings);
             WorkflowInvoker.Invoke(act);
 
+            string InOutActivityOnly = @"<Activity x:Class=""WFTemplate""  xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities""  xmlns:s=""clr-namespace:System;assembly=mscorlib""  xmlns:s1=""clr-namespace:System;assembly=System""  xmlns:sa=""clr-namespace:System.Activities;assembly=System.Activities""  xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">   <x:Members>     <x:Property Name=""myOutput"" Type=""OutArgument(x:Int32)"" />     <x:Property Name=""myInput"" Type=""InArgument(x:Int32)"" />   </x:Members> </Activity>";
+            act = CoreWf.XamlIntegration.ActivityXamlServices.Load(GenerateStreamFromString(InOutActivityOnly), settings);
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("myInput", 1);
+            Dictionary<string, object> outputDict = WorkflowInvoker.Invoke(act, dic) as Dictionary<string, object>;
+            //foreach (var kvp in outputDict.ToList())
+            //{
+            //    Console.WriteLine(kvp.Key.ToString() + " " + kvp.Value.ToString());
+            //}
+
+
+            string InOutActivity = @"<Activity x:Class=""WFTemplate""  xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities""  xmlns:s=""clr-namespace:System;assembly=mscorlib""  xmlns:s1=""clr-namespace:System;assembly=System""  xmlns:sa=""clr-namespace:System.Activities;assembly=System.Activities""  xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">   <x:Members>     <x:Property Name=""myOutput"" Type=""OutArgument(x:Int32)"" />     <x:Property Name=""myInput"" Type=""InArgument(x:Int32)"" />   </x:Members>   <Assign>     <Assign.To>       <OutArgument x:TypeArguments=""x:Int32"">[myOutput]</OutArgument>     </Assign.To>     <Assign.Value>       <InArgument x:TypeArguments=""x:Int32"">[myInput]</InArgument>     </Assign.Value>   </Assign> </Activity>";
+            act = CoreWf.XamlIntegration.ActivityXamlServices.Load(GenerateStreamFromString(InOutActivity), settings);
+            outputDict = WorkflowInvoker.Invoke(act) as Dictionary<string, object>;
+            //foreach (var kvp in outputDict)
+            //{
+            //    Console.WriteLine(kvp.Key.ToString() + " " + kvp.Value.ToString());
+            //}
+
             string XamlText = @"<Activity x:Class=""WFTemplate"" xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">   <Sequence>     <WriteLine Text=""HelloWorld"" />   </Sequence> </Activity>";
             act = CoreWf.XamlIntegration.ActivityXamlServices.Load(GenerateStreamFromString(XamlText), settings);
             WorkflowInvoker.Invoke(act);
-        }
-
-        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            Console.WriteLine(sender.ToString() + " " + args.Name);
-            return null; 
         }
     }
 }
