@@ -6,7 +6,7 @@ using System.Linq;
 using CoreWf;
 using CoreWf.XamlIntegration;
 
-namespace portableXAML
+namespace XAMLConsoleApp
 {
     class Program
     {
@@ -22,7 +22,11 @@ namespace portableXAML
 
         static void Main(string[] args)
         {
-            //Portable.Xaml.XamlSchemaContext
+            Portable.Xaml.XamlObjectReaderSettings rs = new XamlObjectReaderSettings() { };
+            Portable.Xaml.XamlSchemaContext xsContext = new XamlSchemaContext() {  };
+            XamlSchemaContextSettings xsContextSettings = new XamlSchemaContextSettings() { };
+
+
             ActivityXamlServicesSettings settings = new CoreWf.XamlIntegration.ActivityXamlServicesSettings { CompileExpressions = false };
 
             string ActivityAlone = @"<Activity x:Class=""WFTemplate"" xmlns=""http://schemas.microsoft.com/netfx/2009/xaml/activities"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"">   </Activity>";

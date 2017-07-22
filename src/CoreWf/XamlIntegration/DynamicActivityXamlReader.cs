@@ -731,8 +731,7 @@ namespace CoreWf.XamlIntegration
                             {
                                 this.bufferedMember.FollowingNamespaces = new XamlNodeQueue(this.parent.schemaContext);
                             }
-                            //this.bufferedMember.FollowingNamespaces.Writer.WriteNode(reader, lineInfo);
-                            throw new Exception(""); //EBD NULLED
+                            this.bufferedMember.FollowingNamespaces.Writer.WriteNode(reader, lineInfo);
                             writeNodeToOutput = false;
                         }
                         break;

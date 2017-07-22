@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestObjects", "test\TestObj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicConsoleApp", "test\DynamicConsoleApp\DynamicConsoleApp.csproj", "{7F1D0774-0E6C-4909-A55A-F963805ECCC7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "portableXAML", "portableXAML\portableXAML.csproj", "{18B561BD-5D80-4736-844F-91ACEF63C615}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XAMLConsoleApp", "portableXAML\XAMLConsoleApp.csproj", "{18B561BD-5D80-4736-844F-91ACEF63C615}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portable.Xaml-netstandard1.3", "..\Portable.XAML\src\Portable.Xaml\Portable.Xaml-netstandard1.3.csproj", "{6651B219-39E8-491C-8342-3013B06D2709}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -213,6 +215,22 @@ Global
 		{18B561BD-5D80-4736-844F-91ACEF63C615}.Release|x64.Build.0 = Release|Any CPU
 		{18B561BD-5D80-4736-844F-91ACEF63C615}.Release|x86.ActiveCfg = Release|Any CPU
 		{18B561BD-5D80-4736-844F-91ACEF63C615}.Release|x86.Build.0 = Release|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Debug|ARM.Build.0 = Debug|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Debug|x64.Build.0 = Debug|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Debug|x86.Build.0 = Debug|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Release|ARM.Build.0 = Release|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Release|x64.ActiveCfg = Release|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Release|x64.Build.0 = Release|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Release|x86.ActiveCfg = Release|Any CPU
+		{6651B219-39E8-491C-8342-3013B06D2709}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,9 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="XamlIntegration\ActivityWithResultValueSerializer.cs" />
-    <Compile Remove="XamlIntegration\ArgumentValueSerializer.cs" />
-    <Compile Remove="XamlIntegration\AssemblyReferenceConverter.cs" />
     <Compile Remove="XamlIntegration\CompiledDataContext.cs" />
     <Compile Remove="XamlIntegration\CompiledLocation.cs" />
     <Compile Remove="XamlIntegration\ConcatenatingXamlReader.cs" />
@@ -27,14 +24,9 @@
     <Compile Remove="XamlIntegration\DynamicUpdateMapExtension.cs" />
     <Compile Remove="XamlIntegration\DynamicUpdateMapItemConverter.cs" />
     <Compile Remove="XamlIntegration\ExpressionTreeRewriter.cs" />
-    <Compile Remove="XamlIntegration\FuncTypeConverter.cs" />
     <Compile Remove="XamlIntegration\ICompiledExpressionRoot.cs" />
     <Compile Remove="XamlIntegration\ImplementationVersionConverter.cs" />
-    <Compile Remove="XamlIntegration\InArgumentConverter.cs" />
-    <Compile Remove="XamlIntegration\InOutArgumentConverter.cs" />
-    <Compile Remove="XamlIntegration\IValueSerializableExpression.cs" />
     <Compile Remove="XamlIntegration\NetDataContractXmlSerializable.cs" />
-    <Compile Remove="XamlIntegration\OutArgumentConverter.cs" />
     <Compile Remove="XamlIntegration\SerializableFuncDeferringLoader.cs" />
     <Compile Remove="XamlIntegration\TextExpressionCompiler.cs" />
     <Compile Remove="XamlIntegration\TextExpressionCompilerError.cs" />
@@ -45,11 +37,14 @@
   
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Portable.Xaml" Version="0.16.0" />
     <PackageReference Include="System.ComponentModel.EventBasedAsync" Version="4.3.0" />
     <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Portable.XAML\src\Portable.Xaml\Portable.Xaml-netstandard1.3.csproj" />
   </ItemGroup>
 
 </Project>

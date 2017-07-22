@@ -474,33 +474,34 @@ namespace CoreWf.XamlIntegration
         static XamlSchemaContext GetXamlSchemaContext(Assembly assembly, string helperClassName)
         {
             XamlSchemaContext typeSchemaContext = null;
+            //EBW NULLED
             //ReflectionPermission reflectionPerm = new ReflectionPermission(ReflectionPermissionFlag.MemberAccess);
             //reflectionPerm.Assert();
-            //try
-            //{
-            //    Type schemaContextType = assembly.GetType(helperClassName);
-            //    if (schemaContextType == null)
-            //    {
-            //        throw CoreWf.Internals.FxTrace.Exception.AsError(new InvalidOperationException(SR.SchemaContextFromBeforeInitializeComponentXBTExtensionNotFound(helperClassName)));
-            //    }
+            try
+            {
+                Type schemaContextType = assembly.GetType(helperClassName);
+                if (schemaContextType == null)
+                {
+                    throw CoreWf.Internals.FxTrace.Exception.AsError(new InvalidOperationException(SR.SchemaContextFromBeforeInitializeComponentXBTExtensionNotFound(helperClassName)));
+                }
 
-            //    // The "official" BeforeInitializeComponent XBT Extension will not create a generic type for this helper class.
-            //    // This check is here so that the assembly manifest can't lure us into creating a type with a generic argument from a different assembly.
-            //    if (schemaContextType.IsGenericType || schemaContextType.IsGenericTypeDefinition)
-            //    {
-            //        throw CoreWf.Internals.FxTrace.Exception.AsError(new InvalidOperationException(SR.SchemaContextFromBeforeInitializeComponentXBTExtensionCannotBeGeneric(helperClassName)));
-            //    }
+                // The "official" BeforeInitializeComponent XBT Extension will not create a generic type for this helper class.
+                // This check is here so that the assembly manifest can't lure us into creating a type with a generic argument from a different assembly.
+                if (schemaContextType.IsGenericType || schemaContextType.IsGenericTypeDefinition)
+                {
+                    throw CoreWf.Internals.FxTrace.Exception.AsError(new InvalidOperationException(SR.SchemaContextFromBeforeInitializeComponentXBTExtensionCannotBeGeneric(helperClassName)));
+                }
 
-            //    PropertyInfo schemaContextPropertyInfo = schemaContextType.GetProperty("SchemaContext",
-            //        BindingFlags.NonPublic | BindingFlags.Static);
-            //    typeSchemaContext = (XamlSchemaContext)schemaContextPropertyInfo.GetValue(null,
-            //        BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetProperty, null, null, null);
-            //}
-            //finally
-            //{
-            //    CodeAccessPermission.RevertAssert();
-            //}
-            //EBW NULLED
+                PropertyInfo schemaContextPropertyInfo = schemaContextType.GetProperty("SchemaContext",
+                    BindingFlags.NonPublic | BindingFlags.Static);
+                typeSchemaContext = (XamlSchemaContext)schemaContextPropertyInfo.GetValue(null,
+                    BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetProperty, null, null, null);
+            }
+            finally
+            {
+                //EBW NULLED
+                //CodeAccessPermission.RevertAssert();
+            }
             return typeSchemaContext;
         }
 
@@ -516,46 +517,45 @@ namespace CoreWf.XamlIntegration
             XmlReader xmlReader = null;
             XamlReader reader = null;
             XamlObjectWriter objectWriter = null;
-            //try
-            //{
-            //    xmlReader = XmlReader.Create(initializeXaml);
-            //    XamlXmlReaderSettings readerSettings = new XamlXmlReaderSettings();
-            //    readerSettings.LocalAssembly = componentType.Assembly;
-            //    readerSettings.AllowProtectedMembersOnRoot = true;
-            //    reader = new XamlXmlReader(xmlReader, schemaContext, readerSettings);
-            //    XamlObjectWriterSettings writerSettings = new XamlObjectWriterSettings();
-            //    writerSettings.RootObjectInstance = componentInstance;
-            //    writerSettings.AccessLevel = XamlAccessLevel.PrivateAccessTo(componentType);
-            //    objectWriter = new XamlObjectWriter(schemaContext, writerSettings);
+            try
+            {
+                xmlReader = XmlReader.Create(initializeXaml);
+                XamlXmlReaderSettings readerSettings = new XamlXmlReaderSettings();
+                readerSettings.LocalAssembly = componentType.Assembly;
+                readerSettings.AllowProtectedMembersOnRoot = true;
+                reader = new XamlXmlReader(xmlReader, schemaContext, readerSettings);
+                XamlObjectWriterSettings writerSettings = new XamlObjectWriterSettings();
+                writerSettings.RootObjectInstance = componentInstance;
+                //writerSettings.AccessLevel = XamlAccessLevel.PrivateAccessTo(componentType);  //EBW NULLED
+                objectWriter = new XamlObjectWriter(schemaContext, writerSettings);
 
-            //    // We need the XamlLoadPermission for the assembly we are dealing with.
-            //    XamlLoadPermission perm = new XamlLoadPermission(XamlAccessLevel.PrivateAccessTo(componentType));
-            //    perm.Assert();
-            //    try
-            //    {
-            //        XamlServices.Transform(reader, objectWriter);
-            //    }
-            //    finally
-            //    {
-            //        CodeAccessPermission.RevertAssert();
-            //    }
-            //}
-            //finally
-            //{
-            //    if ((xmlReader != null))
-            //    {
-            //        ((IDisposable)(xmlReader)).Dispose();
-            //    }
-            //    if ((reader != null))
-            //    {
-            //        ((IDisposable)(reader)).Dispose();
-            //    }
-            //    if ((objectWriter != null))
-            //    {
-            //        ((IDisposable)(objectWriter)).Dispose();
-            //    }
-            //}
-            //EBW NULLED
+                // We need the XamlLoadPermission for the assembly we are dealing with.
+                //XamlLoadPermission perm = new XamlLoadPermission(XamlAccessLevel.PrivateAccessTo(componentType));  //EBW NULLED
+                //perm.Assert();  //EBW NULLED
+                try
+                {
+                    XamlServices.Transform(reader, objectWriter);
+                }
+                finally
+                {
+                    //CodeAccessPermission.RevertAssert(); //EBW NULLED
+                }
+            }
+            finally
+            {
+                if ((xmlReader != null))
+                {
+                    ((IDisposable)(xmlReader)).Dispose();
+                }
+                if ((reader != null))
+                {
+                    ((IDisposable)(reader)).Dispose();
+                }
+                if ((objectWriter != null))
+                {
+                    ((IDisposable)(objectWriter)).Dispose();
+                }
+            }
         }
 
         class DynamicActivityReaderSchemaContext : XamlSchemaContext
