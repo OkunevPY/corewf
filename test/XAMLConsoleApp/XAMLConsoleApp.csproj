@@ -6,8 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Portable.XAML\src\Portable.Xaml\Portable.Xaml-netstandard1.3.csproj" />
-    <ProjectReference Include="..\src\CoreWf\CoreWf.csproj" />
+    <PackageReference Include="Portable.Xaml" Version="0.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CoreWf\CoreWf.csproj" />
   </ItemGroup>
 
 </Project>

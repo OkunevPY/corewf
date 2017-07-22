@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Portable.XAML\src\Portable.Xaml\Portable.Xaml-netstandard1.3.csproj" />
     <ProjectReference Include="..\..\src\CoreWf\CoreWf.csproj" />
   </ItemGroup>
 

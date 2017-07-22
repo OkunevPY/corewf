@@ -5,6 +5,7 @@ using CoreWf.Expressions;
 using CoreWf.Hosting;
 using CoreWf.Runtime;
 using CoreWf.Validation;
+using CoreWf.XamlIntegration;
 using Portable.Xaml.Markup;
 using System;
 using System.Collections;
@@ -21,7 +22,7 @@ using System.Threading;
 
 namespace CoreWf
 {
-    //[ContentProperty("Implementation")]
+    [ContentProperty("Implementation")]
     public abstract class Activity
     {
         private const string generatedArgumentPrefix = "Argument";
@@ -86,10 +87,10 @@ namespace CoreWf
             set;
         }
 
-        //[XamlDeferLoad(typeof(FuncDeferringLoader), typeof(Activity))]
+        [XamlDeferLoad(typeof(FuncDeferringLoader), typeof(Activity))]
         [DefaultValue(null)]
         [Browsable(false)]
-        //[Ambient]
+        [Ambient]
         protected virtual Func<Activity> Implementation
         {
             get;
@@ -1808,8 +1809,8 @@ namespace CoreWf
         }
     }
 
-    //[TypeConverter(typeof(ActivityWithResultConverter))]
-    //[ValueSerializer(typeof(ActivityWithResultValueSerializer))]
+    [TypeConverter(typeof(ActivityWithResultConverter))]
+    [ValueSerializer(typeof(ActivityWithResultValueSerializer))]
     public abstract class Activity<TResult> : ActivityWithResult
     {
         // alternatives are extended through DynamicActivity<TResult>, CodeActivity<TResult>, and NativeActivity<TResult>

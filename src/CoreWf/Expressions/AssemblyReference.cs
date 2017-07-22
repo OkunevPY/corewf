@@ -1,15 +1,17 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using CoreWf.XamlIntegration;
 using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 
 namespace CoreWf.Expressions
 {
-    //[TypeConverter(typeof(AssemblyReferenceConverter))]
+    [TypeConverter(typeof(AssemblyReferenceConverter))]
     public class AssemblyReference
     {
         private const int AssemblyToAssemblyNameCacheInitSize = 100;

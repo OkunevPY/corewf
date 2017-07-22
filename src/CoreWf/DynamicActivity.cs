@@ -10,12 +10,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime;
+using Portable.Xaml.Markup;
+using CoreWf.XamlIntegration;
 //using System.Windows.Markup;
 //using System.Xaml;
 
 namespace CoreWf
 {
-    //[ContentProperty("Implementation")]
+    [ContentProperty("Implementation")]
     public sealed class DynamicActivity : Activity, ICustomTypeDescriptor, IDynamicActivity
     {
         Activity runtimeImplementation;
@@ -40,7 +42,7 @@ namespace CoreWf
             }
         }
 
-        //[DependsOn("Name")]
+        [DependsOn("Name")]
         public Collection<Attribute> Attributes
         {
             get
@@ -54,7 +56,7 @@ namespace CoreWf
         }
 
         [Browsable(false)]
-        //[DependsOn("Attributes")]
+        [DependsOn("Attributes")]
         public KeyedCollection<string, DynamicActivityProperty> Properties
         {
             get
@@ -63,7 +65,7 @@ namespace CoreWf
             }
         }
 
-        //[DependsOn("Properties")]
+        [DependsOn("Properties")]
         public new Collection<Constraint> Constraints
         {
             get
@@ -86,10 +88,10 @@ namespace CoreWf
             }
         }
 
-        //[XamlDeferLoad(typeof(FuncDeferringLoader), typeof(Activity))]
+        [XamlDeferLoad(typeof(FuncDeferringLoader), typeof(Activity))]
         [DefaultValue(null)]
         [Browsable(false)]
-        //[Ambient]
+        [Ambient]
         public new Func<Activity> Implementation
         {
             get
@@ -203,7 +205,7 @@ namespace CoreWf
         }
     }
 
-    //[ContentProperty("Implementation")]
+    [ContentProperty("Implementation")]
     public sealed class DynamicActivity<TResult> : Activity<TResult>, ICustomTypeDescriptor, IDynamicActivity
     {
         Activity runtimeImplementation;
@@ -228,7 +230,7 @@ namespace CoreWf
             }
         }
 
-        //[DependsOn("Name")]
+        [DependsOn("Name")]
         public Collection<Attribute> Attributes
         {
             get
@@ -242,7 +244,7 @@ namespace CoreWf
         }
 
         [Browsable(false)]
-        //[DependsOn("Attributes")]
+        [DependsOn("Attributes")]
         public KeyedCollection<string, DynamicActivityProperty> Properties
         {
             get
@@ -251,7 +253,7 @@ namespace CoreWf
             }
         }
 
-        //[DependsOn("Properties")]
+        [DependsOn("Properties")]
         public new Collection<Constraint> Constraints
         {
             get
@@ -274,10 +276,10 @@ namespace CoreWf
             }
         }
 
-        //[XamlDeferLoad(typeof(FuncDeferringLoader), typeof(Activity))]
+        [XamlDeferLoad(typeof(FuncDeferringLoader), typeof(Activity))]
         [DefaultValue(null)]
         [Browsable(false)]
-        //[Ambient]
+        [Ambient]
         public new Func<Activity> Implementation
         {
             get
