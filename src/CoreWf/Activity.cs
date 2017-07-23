@@ -91,7 +91,7 @@ namespace CoreWf
         [DefaultValue(null)]
         [Browsable(false)]
         [Ambient]
-        protected virtual Func<Activity> Implementation
+        public virtual Func<Activity> Implementation
         {
             get;
             set;

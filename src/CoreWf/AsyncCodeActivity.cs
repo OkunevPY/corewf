@@ -32,7 +32,7 @@ namespace CoreWf
 
         [IgnoreDataMember]
         [Fx.Tag.KnownXamlExternal]
-        protected sealed override Func<Activity> Implementation
+        public sealed override Func<Activity> Implementation
         {
             get
             {
@@ -317,7 +317,7 @@ namespace CoreWf
 
         [IgnoreDataMember]
         [Fx.Tag.KnownXamlExternal]
-        protected sealed override Func<Activity> Implementation
+        public sealed override Func<Activity> Implementation
         {
             get
             {
