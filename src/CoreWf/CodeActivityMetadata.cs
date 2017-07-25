@@ -144,10 +144,10 @@ namespace CoreWf
             }
         }
 
-        //public Collection<RuntimeArgument> GetArgumentsWithReflection()
-        //{
-        //    return Activity.ReflectedInformation.GetArguments(this.activity);
-        //}
+        public Collection<RuntimeArgument> GetArgumentsWithReflection()
+        {
+            return Activity.ReflectedInformation.GetArguments(_activity);
+        }
 
         public void AddDefaultExtensionProvider<T>(Func<T> extensionProvider)
             where T : class

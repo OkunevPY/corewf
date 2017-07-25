@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicConsoleApp", "test\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XAMLConsoleApp", "test\XAMLConsoleApp\XAMLConsoleApp.csproj", "{81283D9E-839A-4E24-87F5-0A7A45DF54F2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portable.Xaml-netstandard1.3", "..\Portable.XAML\src\Portable.Xaml\Portable.Xaml-netstandard1.3.csproj", "{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +215,22 @@ Global
 		{81283D9E-839A-4E24-87F5-0A7A45DF54F2}.Release|x64.Build.0 = Release|Any CPU
 		{81283D9E-839A-4E24-87F5-0A7A45DF54F2}.Release|x86.ActiveCfg = Release|Any CPU
 		{81283D9E-839A-4E24-87F5-0A7A45DF54F2}.Release|x86.Build.0 = Release|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Debug|ARM.Build.0 = Debug|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Debug|x64.Build.0 = Debug|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Release|ARM.ActiveCfg = Release|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Release|ARM.Build.0 = Release|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Release|x64.ActiveCfg = Release|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Release|x64.Build.0 = Release|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{0C5BF7FC-A173-4200-BB27-1817FA33F6DB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
