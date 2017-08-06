@@ -104,6 +104,53 @@ namespace DynamicConsoleApp
             WorkflowInvoker.Invoke(dynamicWorkflow, new Dictionary<string, object> { { "DelayDuration", new TimeSpan(200) } });
         }
 
+		public static void ParameterAssign()
+		{
+			//Define the input argument for the activity  
+			var inputValue = new InArgument<int>();
+            var outputValue = new OutArgument<int>();
+			//Create the activity, property, and implementation  
+			Activity dynamicWorkflow = new DynamicActivity()
+			{
+				Properties =
+				{
+					new DynamicActivityProperty
+					{
+						Name = "InputInteger",
+						Type = typeof(InArgument<int>),
+						Value = inputValue
+					},
+					new DynamicActivityProperty
+					{
+						Name = "OutputInteger",
+						Type = typeof(OutArgument<int>),
+						Value = outputValue
+					},
+				},
+				Implementation = () => new Sequence()
+				{
+					Activities =
+					{
+                        new Assign()
+                        { 
+                            To = new OutArgument<int>(env => outputValue.Get(env)), 
+                            Value = new InArgument<int>(env => inputValue.Get(env) )
+                        },
+						new WriteLine()
+						{
+							Text = new InArgument<string>("Assign was successful")
+						}
+					}
+				}
+			};
+			//Execute the activity with a parameter dictionary  
+			var o = WorkflowInvoker.Invoke(dynamicWorkflow, new Dictionary<string, object> { { "InputInteger", 42 } });
+            foreach(var kvp in o)
+            { 
+                Console.WriteLine(kvp.Key + " : " + kvp.Value.ToString());
+            }
+		}
+
         static void Main(string[] args)
         {
             Console.WriteLine("------------- ParameterlessDelay ------------- ");
@@ -126,6 +173,15 @@ namespace DynamicConsoleApp
             {
                 Console.WriteLine("Invalid Workflow ParameterDelay" + iwe.ToString());
             }
+			Console.WriteLine("------------- ParameterDelay ------------- ");
+			try
+			{
+				DynamicDemo.ParameterAssign();
+			}
+			catch (CoreWf.InvalidWorkflowException iwe)
+			{
+				Console.WriteLine("Invalid Workflow ParameterDelay" + iwe.ToString());
+			}
             Console.WriteLine("------------- Done ------------- ");
             Console.ReadLine(); 
         }
