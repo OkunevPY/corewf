@@ -250,6 +250,12 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Resource files
+*.resources
+
+# VS Code files 
+.vscode/
 /DevelopmentTests.playlist
 /src/CoreWf/XamlIntegration/Unused
 /SystemXAML
