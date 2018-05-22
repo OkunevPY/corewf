@@ -44,7 +44,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Portable.XAML\src\Portable.Xaml\Portable.Xaml-netstandard1.3.csproj" />
+    <Reference Include="Portable.Xaml">
+      <HintPath>..\..\..\..\..\..\..\Data-Dump\projects\Portable.Xaml\artifacts\core\Debug\netstandard1.3\Portable.Xaml.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

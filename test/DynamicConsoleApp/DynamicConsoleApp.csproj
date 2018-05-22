@@ -6,11 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Portable.Xaml" Version="0.16.0" />
+    <ProjectReference Include="..\..\src\CoreWf\CoreWf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CoreWf\CoreWf.csproj" />
+    <Reference Include="Portable.Xaml">
+      <HintPath>..\..\..\..\..\..\..\Data-Dump\projects\Portable.Xaml\artifacts\core\Debug\netstandard1.3\Portable.Xaml.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
