@@ -1,3 +1,7 @@
+# Notes on repo
+
+This is a fork of the CoreWF repo, on .net standard 2.0. I'm trying to bring this up to the point where XAML based workflows can be parsed. This is a dirty repository - not for any production release. Once stuff works, I hope to clean it up and submit pull requests to upstream.
+
 # Core WF
 A port of the Windows Workflow Foundation (WF) runtime to the .NET Standard.
 
